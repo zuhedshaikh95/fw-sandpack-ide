@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "@/providers/theme";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,23 +16,17 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "FrontendWarrior",
-  description: "The warrior way to prepare for Frontend Interview",
+  description: "Roadmap for the Warrior's Way to Prepare for Frontend Interviews",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <main className="w-screen h-screen flex flex-col bg-[#070708]">
-          {children}
-
-          <footer className="p-3 bg-[#070708] flex justify-center items-center">
-            <p className="text-white">Footer</p>
-          </footer>
+        <main>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+            {children}
+          </ThemeProvider>
         </main>
       </body>
     </html>

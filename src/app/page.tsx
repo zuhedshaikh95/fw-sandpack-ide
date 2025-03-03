@@ -1,12 +1,13 @@
-import { SandpackIde } from "@/components/ide";
-import { Suspense } from "react";
+import Link from "next/link";
 
-export default function Home() {
+import { Button } from "@/components/ui";
+
+export default async function IndexPage() {
   return (
-    <section className="grow">
-      <Suspense fallback={null}>
-        <SandpackIde />
-      </Suspense>
+    <section className="h-screen w-screen flex justify-center items-center">
+      <Link href="/questions/todo-list">
+        <Button className="rounded-sm cursor-pointer">Go to Question</Button>
+      </Link>
     </section>
   );
 }
