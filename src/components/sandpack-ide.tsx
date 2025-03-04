@@ -10,12 +10,26 @@ import {
   Navigator as SandpackNavigator,
   SandpackPreview,
   SandpackProvider,
+  SandpackTests,
 } from "@codesandbox/sandpack-react";
-import { BookOpenIcon, FileIcon, FileTextIcon, HistoryIcon } from "lucide-react";
+import { BookOpenIcon, FileIcon, FileTextIcon, HistoryIcon, PlayIcon, SquareTerminalIcon } from "lucide-react";
 
 import { MonacoEditor } from "@/components";
 import { Resizable, Tabs } from "@/components/ui";
-import { cn } from "@/libs/utils";
+
+const addTestFile = `import * as matchers from 'jest-extended';
+import { add } from './add';
+
+expect.extend(matchers);
+
+describe('jest-extended matchers are supported', () => {
+  test('adding two positive integers yields a positive integer', () => {
+    expect(add(1, 2)).toBePositive();
+  });
+});
+`;
+
+const addFile = `export const add = (a: number, b: number): number => a + b;`;
 
 const SandpackIde: React.FC = () => {
   const [theme] = useState(SANDPACK_THEMES.dark);
@@ -24,7 +38,13 @@ const SandpackIde: React.FC = () => {
   const searchParams = useSearchParams();
 
   return (
-    <SandpackProvider template="react" theme={theme} style={{ height: "100%", padding: 12 }}>
+    <SandpackProvider
+      customSetup={{ dependencies: { "jest-extended": "^3.0.2" } }}
+      files={{ "/add.test.ts": addTestFile, "add.ts": addFile }}
+      template="react"
+      theme={theme}
+      style={{ height: "100%", padding: 12 }}
+    >
       <SandpackLayout className="h-full" style={{ background: "transparent", border: "none" }}>
         <Resizable.PanelGroup direction="horizontal">
           <Resizable.Panel defaultSize={30} minSize={10}>
@@ -32,9 +52,9 @@ const SandpackIde: React.FC = () => {
               className="border border-neutral-800 bg-[#1E1E1E] h-full rounded-lg"
               defaultValue={`${searchParams.get("tab") ?? "description"}`}
             >
-              <Tabs.List className="bg-transparent my-1 mx-2 gap-x-1.5">
+              <Tabs.List className="bg-transparent my-1 mx-2 gap-x-2">
                 <Tabs.Trigger
-                  className="text-neutral-500 data-[state=active]:bg-transparent"
+                  className="text-neutral-500 data-[state=active]:bg-transparent cursor-pointer hover:text-green-500 shadow-none font-medium"
                   value="description"
                   onClick={() => router.push(`${pathName}?tab=description`)}
                 >
@@ -43,7 +63,7 @@ const SandpackIde: React.FC = () => {
                 </Tabs.Trigger>
 
                 <Tabs.Trigger
-                  className="text-neutral-500 data-[state=active]:bg-transparent"
+                  className="text-neutral-500 data-[state=active]:bg-transparent cursor-pointer hover:text-green-500 shadow-none font-medium"
                   value="file-explorer"
                   onClick={() => router.push(`${pathName}?tab=file-explorer`)}
                 >
@@ -52,7 +72,7 @@ const SandpackIde: React.FC = () => {
                 </Tabs.Trigger>
 
                 <Tabs.Trigger
-                  className="text-neutral-500 data-[state=active]:bg-transparent"
+                  className="text-neutral-500 data-[state=active]:bg-transparent cursor-pointer hover:text-green-500 shadow-none font-medium"
                   value="editorial"
                   onClick={() => router.push(`${pathName}?tab=editorial`)}
                 >
@@ -61,7 +81,7 @@ const SandpackIde: React.FC = () => {
                 </Tabs.Trigger>
 
                 <Tabs.Trigger
-                  className="text-neutral-500 data-[state=active]:bg-transparent"
+                  className="text-neutral-500 data-[state=active]:bg-transparent cursor-pointer hover:text-green-500 shadow-none font-medium"
                   value="submissions"
                   onClick={() => router.push(`${pathName}?tab=submissions`)}
                 >
@@ -103,11 +123,46 @@ const SandpackIde: React.FC = () => {
               <Resizable.Handle className="p-0.5 my-1 bg-transparent hover:bg-yellow-200 rounded-full transition-colors" />
 
               <Resizable.Panel defaultSize={50} minSize={20}>
-                <SandpackConsole
-                  className="h-full rounded-lg border border-neutral-800"
-                  showSetupProgress={false}
-                  resetOnPreviewRestart
-                />
+                <Tabs.Root
+                  defaultValue="test-cases"
+                  className="border border-neutral-800 bg-[#1E1E1E] h-full rounded-lg"
+                >
+                  <Tabs.List className="bg-transparent my-1 mx-2">
+                    <Tabs.Trigger
+                      className="text-neutral-500 data-[state=active]:bg-transparent cursor-pointer hover:text-green-500"
+                      value="test-cases"
+                    >
+                      <PlayIcon className="w-1 h-1" />
+                      <p>Run Tests</p>
+                    </Tabs.Trigger>
+
+                    <Tabs.Trigger
+                      className="text-neutral-500 data-[state=active]:bg-transparent cursor-pointer hover:text-green-500"
+                      value="console"
+                    >
+                      <SquareTerminalIcon className="w-1 h-1" />
+                      <p>Console</p>
+                    </Tabs.Trigger>
+                  </Tabs.List>
+
+                  <Tabs.Content className="h-full" value="test-cases">
+                    <SandpackTests
+                      watchMode
+                      showVerboseButton={false}
+                      showWatchButton={false}
+                      className="h-full rounded-lg"
+                      style={{ background: "#1E1E1E" }}
+                    />
+                  </Tabs.Content>
+                  <Tabs.Content className="h-full" value="console">
+                    <SandpackConsole
+                      className="h-full rounded-lg"
+                      style={{ background: "#1E1E1E" }}
+                      showSetupProgress={false}
+                      resetOnPreviewRestart
+                    />
+                  </Tabs.Content>
+                </Tabs.Root>
               </Resizable.Panel>
             </Resizable.PanelGroup>
           </Resizable.Panel>

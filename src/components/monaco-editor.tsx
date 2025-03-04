@@ -13,7 +13,7 @@ export const MonacoEditor: React.FC<Props> = ({ language }: Props) => {
 
   return (
     <SandpackStack className="h-full">
-      <FileTabs closableTabs />
+      <FileTabs closableTabs style={{ background: "#1E1E1E", border: "none" }} />
       <Editor
         language={language}
         theme="vs-dark"
