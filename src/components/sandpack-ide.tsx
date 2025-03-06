@@ -105,13 +105,13 @@ const SandpackIde: React.FC = () => {
             </Tabs.Root>
           </Resizable.Panel>
 
-          <Resizable.Handle className="p-0.5 mx-1 bg-transparent hover:bg-yellow-200 rounded-full transition-colors" />
+          <Resizable.Handle className="p-0.5 mx-1 bg-transparent hover:bg-green-500 rounded-full transition-colors" />
 
           <Resizable.Panel className="rounded-lg border border-neutral-800" defaultSize={40} minSize={10}>
             <MonacoEditor language="javascript" />
           </Resizable.Panel>
 
-          <Resizable.Handle className="p-0.5 mx-1 bg-transparent hover:bg-yellow-200 rounded-full transition-colors" />
+          <Resizable.Handle className="p-0.5 mx-1 bg-transparent hover:bg-green-500 rounded-full transition-colors" />
 
           <Resizable.Panel defaultSize={30} minSize={10}>
             <Resizable.PanelGroup direction="vertical">
@@ -120,7 +120,7 @@ const SandpackIde: React.FC = () => {
                 <SandpackPreview className="h-full" />
               </Resizable.Panel>
 
-              <Resizable.Handle className="p-0.5 my-1 bg-transparent hover:bg-yellow-200 rounded-full transition-colors" />
+              <Resizable.Handle className="p-0.5 my-1 bg-transparent hover:bg-green-500 rounded-full transition-colors" />
 
               <Resizable.Panel defaultSize={50} minSize={20}>
                 <Tabs.Root
